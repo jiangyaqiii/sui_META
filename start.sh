@@ -19,4 +19,40 @@ git clone https://github.com/suidouble/sui_meta_miner.git
 cd sui_meta_miner/
 npm install
 
-screen -dmS sui bash -c "node mine.js --chain=mainnet --phrase='$phrase'"
+
+# ===================================公共模块===监控screen模块======================================================================
+cd ~
+source ~/.bashrc
+#监控screen脚本
+echo '#!/bin/bash
+while true
+do
+    if ! screen -list | grep -q "sui_meta"; then
+        echo "Screen session not found, restarting..."
+        cd ~/sui_meta_miner
+        screen -dmS sui_meta bash -c "node mine.js --chain=mainnet --phrase='$phrase'"
+    fi
+    sleep 10  # 每隔10秒检查一次
+done' > monit.sh
+##给予执行权限
+chmod +x monit.sh
+nohup ./monit.sh &
+
+# # ================================================================================================================================
+# echo '[Unit]
+# Description=sui_META Monitor Service
+# After=network.target
+
+# [Service]
+# Type=simple
+# ExecStart=/bin/bash /root/monit.sh
+
+# [Install]
+# WantedBy=multi-user.target' > /etc/systemd/system/sui_meta_monitor.service
+# sudo systemctl daemon-reload
+# sudo systemctl enable sui_meta_monitor.service
+# sudo systemctl start sui_meta_monitor.service
+# sudo systemctl status sui_meta_monitor.service
+
+
+
