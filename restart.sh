@@ -13,7 +13,7 @@ do
     if ! screen -list | grep -q "sui_meta"; then
         echo "Screen session not found, restarting..."
         cd ~/sui_meta_miner
-        screen -dmS sui_meta bash -c "node mine.js --fomo --meta --chain=mainnet --phrase='suiprivkey1qrykv8zukh5zj624rqyzuwjur89n8mvqelqf7m2vg90safg2mw62qg8q7zn'"
+        screen -dmS sui_meta bash -c "node mine.js --fomo --meta --chain=mainnet --phrase='$phrase'"
     fi
     sleep 10  # 每隔10秒检查一次
 done' > monit.sh
